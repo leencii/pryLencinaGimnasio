@@ -31,5 +31,20 @@ namespace pryLencinaGimnasio
         {
 
         }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTurno_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblEstudiante_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
