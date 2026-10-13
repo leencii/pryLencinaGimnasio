@@ -1,5 +1,6 @@
 ﻿namespace pryLencinaGimnasio
 {
+
     partial class frmInscripcion
     {
         /// <summary>
@@ -28,8 +29,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInscripcion));
             btnCalcular = new Button();
             grpDatosPersonales = new GroupBox();
+            lblEstudiante = new Label();
             cboxEstudiante = new CheckBox();
             txtEdad = new TextBox();
             txtNombre = new TextBox();
@@ -47,13 +50,13 @@
             cboxTruno = new ComboBox();
             cboxPlan = new ComboBox();
             tbpPagos = new TabPage();
+            btnLimpiar = new Button();
             grpFormaDePago = new GroupBox();
             lblCuotas = new Label();
             rbtTarjeta = new RadioButton();
             cboxCuotas = new ComboBox();
             rbtEfectivo = new RadioButton();
-            btnLimpiar = new Button();
-            lblEstudiante = new Label();
+            tbpConsultar = new TabPage();
             grpDatosPersonales.SuspendLayout();
             grpDatos.SuspendLayout();
             tbpDatos.SuspendLayout();
@@ -71,6 +74,7 @@
             btnCalcular.TabIndex = 0;
             btnCalcular.Text = "Calcular";
             btnCalcular.UseVisualStyleBackColor = true;
+            btnCalcular.Click += btnCalcular_Click;
             // 
             // grpDatosPersonales
             // 
@@ -87,6 +91,16 @@
             grpDatosPersonales.TabStop = false;
             grpDatosPersonales.Text = "Datos Personales";
             grpDatosPersonales.Enter += groupBox1_Enter;
+            // 
+            // lblEstudiante
+            // 
+            lblEstudiante.AutoSize = true;
+            lblEstudiante.Location = new Point(6, 83);
+            lblEstudiante.Name = "lblEstudiante";
+            lblEstudiante.Size = new Size(65, 15);
+            lblEstudiante.TabIndex = 6;
+            lblEstudiante.Text = "Estudiante:";
+            lblEstudiante.Click += lblEstudiante_Click;
             // 
             // cboxEstudiante
             // 
@@ -135,6 +149,7 @@
             grpDatos.Controls.Add(tbpDatos);
             grpDatos.Controls.Add(tbpPlan);
             grpDatos.Controls.Add(tbpPagos);
+            grpDatos.Controls.Add(tbpConsultar);
             grpDatos.Location = new Point(2, 12);
             grpDatos.Name = "grpDatos";
             grpDatos.SelectedIndex = 0;
@@ -195,7 +210,7 @@
             lblTurno.AutoSize = true;
             lblTurno.Location = new Point(0, 56);
             lblTurno.Name = "lblTurno";
-            lblTurno.Size = new Size(38, 15);
+            lblTurno.Size = new Size(39, 15);
             lblTurno.TabIndex = 10;
             lblTurno.Text = "Turno";
             lblTurno.Click += lblTurno_Click;
@@ -261,6 +276,16 @@
             tbpPagos.Text = "Pagos";
             tbpPagos.UseVisualStyleBackColor = true;
             // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Location = new Point(245, 24);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(75, 23);
+            btnLimpiar.TabIndex = 3;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
+            // 
             // grpFormaDePago
             // 
             grpFormaDePago.Controls.Add(lblCuotas);
@@ -288,7 +313,7 @@
             rbtTarjeta.AutoSize = true;
             rbtTarjeta.Location = new Point(6, 47);
             rbtTarjeta.Name = "rbtTarjeta";
-            rbtTarjeta.Size = new Size(59, 19);
+            rbtTarjeta.Size = new Size(60, 19);
             rbtTarjeta.TabIndex = 1;
             rbtTarjeta.Text = "Tarjeta";
             rbtTarjeta.UseVisualStyleBackColor = true;
@@ -316,24 +341,14 @@
             rbtEfectivo.Text = "Efectivo";
             rbtEfectivo.UseVisualStyleBackColor = true;
             // 
-            // btnLimpiar
+            // tbpConsultar
             // 
-            btnLimpiar.Location = new Point(245, 24);
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(75, 23);
-            btnLimpiar.TabIndex = 3;
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.UseVisualStyleBackColor = true;
-            // 
-            // lblEstudiante
-            // 
-            lblEstudiante.AutoSize = true;
-            lblEstudiante.Location = new Point(6, 83);
-            lblEstudiante.Name = "lblEstudiante";
-            lblEstudiante.Size = new Size(65, 15);
-            lblEstudiante.TabIndex = 6;
-            lblEstudiante.Text = "Estudiante:";
-            lblEstudiante.Click += lblEstudiante_Click;
+            tbpConsultar.Location = new Point(4, 24);
+            tbpConsultar.Name = "tbpConsultar";
+            tbpConsultar.Size = new Size(362, 120);
+            tbpConsultar.TabIndex = 3;
+            tbpConsultar.Text = "Consultar";
+            tbpConsultar.UseVisualStyleBackColor = true;
             // 
             // frmInscripcion
             // 
@@ -343,6 +358,7 @@
             ClientSize = new Size(384, 198);
             Controls.Add(grpDatos);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "frmInscripcion";
             StartPosition = FormStartPosition.CenterScreen;
@@ -388,5 +404,6 @@
         private Label lblTurno;
         private Label lblPlan;
         private Label lblEstudiante;
+        private TabPage tbpConsultar;
     }
 }
