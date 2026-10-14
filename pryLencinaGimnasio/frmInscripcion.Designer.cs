@@ -57,6 +57,8 @@
             cboxCuotas = new ComboBox();
             rbtEfectivo = new RadioButton();
             tbpConsultar = new TabPage();
+            btnConsultar = new Button();
+            ltsConsulta = new ListBox();
             grpDatosPersonales.SuspendLayout();
             grpDatos.SuspendLayout();
             tbpDatos.SuspendLayout();
@@ -64,6 +66,7 @@
             grpPlan.SuspendLayout();
             tbpPagos.SuspendLayout();
             grpFormaDePago.SuspendLayout();
+            tbpConsultar.SuspendLayout();
             SuspendLayout();
             // 
             // btnCalcular
@@ -343,12 +346,32 @@
             // 
             // tbpConsultar
             // 
+            tbpConsultar.Controls.Add(btnConsultar);
+            tbpConsultar.Controls.Add(ltsConsulta);
             tbpConsultar.Location = new Point(4, 24);
             tbpConsultar.Name = "tbpConsultar";
             tbpConsultar.Size = new Size(362, 120);
             tbpConsultar.TabIndex = 3;
             tbpConsultar.Text = "Consultar";
             tbpConsultar.UseVisualStyleBackColor = true;
+            // 
+            // btnConsultar
+            // 
+            btnConsultar.Location = new Point(264, 47);
+            btnConsultar.Name = "btnConsultar";
+            btnConsultar.Size = new Size(75, 23);
+            btnConsultar.TabIndex = 2;
+            btnConsultar.Text = "Consultar";
+            btnConsultar.UseVisualStyleBackColor = true;
+            btnConsultar.Click += btnConsultar_Click;
+            // 
+            // ltsConsulta
+            // 
+            ltsConsulta.FormattingEnabled = true;
+            ltsConsulta.Location = new Point(6, 12);
+            ltsConsulta.Name = "ltsConsulta";
+            ltsConsulta.Size = new Size(238, 94);
+            ltsConsulta.TabIndex = 0;
             // 
             // frmInscripcion
             // 
@@ -373,6 +396,7 @@
             tbpPagos.ResumeLayout(false);
             grpFormaDePago.ResumeLayout(false);
             grpFormaDePago.PerformLayout();
+            tbpConsultar.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -405,5 +429,7 @@
         private Label lblPlan;
         private Label lblEstudiante;
         private TabPage tbpConsultar;
+        private Button btnConsultar;
+        private ListBox ltsConsulta;
     }
 }
