@@ -5,8 +5,8 @@ namespace pryLencinaGimnasio
 {
     public partial class frmInscripcion : Form
     {
-        // declarar el array
-        SOCIO[] arrayClientes = new SOCIO[100];
+        // declarar el array para máximo 3 clientes
+        SOCIO[] arrayClientes = new SOCIO[3];
         int indiceClientes = 0;
 
         public struct SOCIO
@@ -189,14 +189,14 @@ namespace pryLencinaGimnasio
                     "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // guardar en el array
-            if (indiceClientes < arrayClientes.Length)
+            if (indiceClientes < 3)
             {
                 arrayClientes[indiceClientes] = sOCIO;
                 indiceClientes++;
             }
             else
             {
-                MessageBox.Show("No hay más espacio para guardar clientes.");
+                MessageBox.Show("Se ha alcanzado el límite máximo de 3 clientes.", "Límite", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             EstadoInicial();
@@ -212,21 +212,19 @@ namespace pryLencinaGimnasio
                 return;
             }
 
+            // Recorre hasta un máximo de 3 clientes 
             for (int i = 0; i < indiceClientes; i++)
             {
                 SOCIO socioActual = arrayClientes[i];
 
-                ltsConsulta.Items.Add("Resumen de inscripción");
-                ltsConsulta.Items.Add($"Cliente: {socioActual.nombre}");
-                ltsConsulta.Items.Add($"Edad: {socioActual.edad}");
-                ltsConsulta.Items.Add($"Meses: {socioActual.meses}");
-                ltsConsulta.Items.Add($"Subtotal: ${socioActual.subtotal:0}");
-                ltsConsulta.Items.Add($"Descuento aplicado: ${socioActual.porcentajeDescuento:0}");
-                ltsConsulta.Items.Add($"Total a pagar: ${socioActual.total:0}");
+                string formatoLinea = $"Cliente: {socioActual.nombre}, Edad: {socioActual.edad}, Meses: {socioActual.meses}, Subtotal: ${socioActual.subtotal:0}, Descuento aplicado: ${socioActual.porcentajeDescuento:0.00}, Total a pagar: ${socioActual.total:0.00}";
+
+                ltsConsulta.Items.Add(formatoLinea);
+                ltsConsulta.Items.Add("");
             }
         }
 
-                
+
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void lblEstudiante_Click(object sender, EventArgs e) { }
         private void groupBox1_Enter_1(object sender, EventArgs e) { }

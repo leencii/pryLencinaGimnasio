@@ -121,6 +121,7 @@
             txtEdad.Name = "txtEdad";
             txtEdad.Size = new Size(100, 23);
             txtEdad.TabIndex = 4;
+            txtEdad.TextChanged += txtEdad_TextChanged;
             // 
             // txtNombre
             // 
@@ -128,6 +129,7 @@
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(100, 23);
             txtNombre.TabIndex = 1;
+            txtNombre.TextChanged += txtNombre_TextChanged;
             // 
             // lblEdad
             // 
@@ -244,6 +246,7 @@
             txtMeses.Name = "txtMeses";
             txtMeses.Size = new Size(93, 23);
             txtMeses.TabIndex = 7;
+            txtMeses.TextChanged += txtMeses_TextChanged;
             // 
             // cboxTruno
             // 
@@ -357,9 +360,9 @@
             // 
             // btnConsultar
             // 
-            btnConsultar.Location = new Point(264, 47);
+            btnConsultar.Location = new Point(270, 47);
             btnConsultar.Name = "btnConsultar";
-            btnConsultar.Size = new Size(75, 23);
+            btnConsultar.Size = new Size(79, 23);
             btnConsultar.TabIndex = 2;
             btnConsultar.Text = "Consultar";
             btnConsultar.UseVisualStyleBackColor = true;
@@ -368,9 +371,10 @@
             // ltsConsulta
             // 
             ltsConsulta.FormattingEnabled = true;
+            ltsConsulta.HorizontalScrollbar = true;
             ltsConsulta.Location = new Point(6, 12);
             ltsConsulta.Name = "ltsConsulta";
-            ltsConsulta.Size = new Size(238, 94);
+            ltsConsulta.Size = new Size(258, 94);
             ltsConsulta.TabIndex = 0;
             // 
             // frmInscripcion
