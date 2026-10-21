@@ -5,7 +5,7 @@ namespace pryLencinaGimnasio
 {
     public partial class frmInscripcion : Form
     {
-        // declarar el array para máximo 3 clientes
+        // declarar el array
         SOCIO[] arrayClientes = new SOCIO[3];
         int indiceClientes = 0;
 
@@ -22,7 +22,10 @@ namespace pryLencinaGimnasio
             public decimal valorCuota;
         }
 
-        #region Declaracion de constantes
+        // declaramos la variable del struct arriba
+        SOCIO sOCIO;
+
+        #region declaracion de constante
         public const decimal PRECIO_MUSCULACION = 15000m;
         public const decimal PRECIO_FUNCIONAL = 18000m;
         public const decimal PRECIO_NATACION = 22000m;
@@ -58,7 +61,6 @@ namespace pryLencinaGimnasio
             txtNombre.Text = "";
             txtEdad.Text = "";
             txtMeses.Text = "1";
-
             cboxCasillero.Checked = false;
             cboxEstudiante.Checked = false;
             cboxPlan.SelectedIndex = 0;
@@ -66,7 +68,6 @@ namespace pryLencinaGimnasio
             rbtEfectivo.Checked = true;
             cboxCuotas.SelectedIndex = -1;
             cboxCuotas.Enabled = false;
-
             btnCalcular.Enabled = false;
             txtNombre.Focus();
         }
@@ -76,7 +77,15 @@ namespace pryLencinaGimnasio
             EstadoInicial();
         }
 
-        // validaciones del teclado
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            cboxCuotas.Enabled = rbtTarjeta.Checked;
+            if (!rbtTarjeta.Checked)
+                cboxCuotas.SelectedIndex = -1;
+            else if (cboxCuotas.Items.Count > 0)
+                cboxCuotas.SelectedIndex = 0;
+        }
+
         private void txtMeses_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
@@ -96,99 +105,122 @@ namespace pryLencinaGimnasio
         private void txtEdad_TextChanged(object sender, EventArgs e) => ActivarBotonCalcularFormulario();
         private void txtMeses_TextChanged(object sender, EventArgs e) => ActivarBotonCalcularFormulario();
 
-        // logica
         private void btnCalcular_Click(object sender, EventArgs e)
         {
-            SOCIO sOCIO = new SOCIO();
-
             sOCIO.nombre = txtNombre.Text;
             sOCIO.edad = int.Parse(txtEdad.Text);
             sOCIO.meses = int.Parse(txtMeses.Text);
 
-            #region Validacion edad y mes
+            // switch 
+            sOCIO.precioMensual = cboxPlan.SelectedIndex switch
+            {
+                0 => PRECIO_MUSCULACION,
+                1 => PRECIO_FUNCIONAL,
+                2 => PRECIO_NATACION,
+                _ => 0m
+            };
+
+            sOCIO.subtotal = sOCIO.precioMensual * sOCIO.meses;
+
+            #region calculo de precio mensual segun plan
+            if (cboxCasillero.Checked)
+            {
+                sOCIO.subtotal += PRECIO_CASILLERO * sOCIO.meses;
+            }
+            sOCIO.total = sOCIO.subtotal;
+            #endregion
+
+            #region validacion edad y mes
             if (sOCIO.edad < EDAD_MINIMA)
             {
-                MessageBox.Show($"El cliente no cumple con la edad mínima de {EDAD_MINIMA} años.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"El cliente {sOCIO.nombre} no cumple con la edad mínima de {EDAD_MINIMA} años para inscribirse.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EstadoInicial();
                 return;
             }
             if (sOCIO.meses < 1 || sOCIO.meses > 12)
             {
-                MessageBox.Show("La cantidad de meses debe estar entre 1 y 12.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"El cliente {sOCIO.nombre} no puede inscribirse por esa cantidad de meses.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EstadoInicial();
                 return;
             }
             #endregion
 
-            #region Calculo de precio mensual segun plan
-            sOCIO.precioMensual = cboxPlan.Text switch
+            #region turno seleccionado
+            // el switch de los turnos 
+            string horarioSeleccionado = cboxTruno.Text;
+            switch (horarioSeleccionado)
             {
-                "Musculación" => PRECIO_MUSCULACION,
-                "Musculacion" => PRECIO_MUSCULACION,
-                "Funcional" => PRECIO_FUNCIONAL,
-                "Natación" => PRECIO_NATACION,
-                "Natacion" => PRECIO_NATACION,
-                _ => PRECIO_MUSCULACION
-            };
-
-            if (cboxCasillero.Checked)
-            {
-                sOCIO.precioMensual += PRECIO_CASILLERO;
+                case "Mañana":
+                    horarioSeleccionado = "Mañana";
+                    break;
+                case "Tarde":
+                    horarioSeleccionado = "Tarde";
+                    break;
+                case "Noche":
+                    horarioSeleccionado = "Noche";
+                    break;
             }
-
-            sOCIO.subtotal = sOCIO.precioMensual * sOCIO.meses;
-            sOCIO.total = sOCIO.subtotal;
             #endregion
 
-            #region Descuento por edad y estudiante
+            #region descuento por edad y estudiante
+            // uso de if/else para los descuentos
+            sOCIO.total = sOCIO.subtotal;
             if (sOCIO.edad < 18)
             {
                 sOCIO.porcentajeDescuento = sOCIO.subtotal * 0.25m;
-            }
-            else if (sOCIO.edad >= 65)
-            {
-                sOCIO.porcentajeDescuento = sOCIO.subtotal * 0.30m;
-            }
-            else if (cboxEstudiante.Checked)
-            {
-                sOCIO.porcentajeDescuento = sOCIO.subtotal * 0.15m;
+                sOCIO.total -= sOCIO.porcentajeDescuento;
             }
             else
             {
-                sOCIO.porcentajeDescuento = 0;
+                if (sOCIO.edad >= 65)
+                {
+                    sOCIO.porcentajeDescuento = sOCIO.subtotal * 0.30m;
+                    sOCIO.total -= sOCIO.porcentajeDescuento;
+                }
+                else
+                {
+                    if (cboxEstudiante.Checked)
+                    {
+                        sOCIO.porcentajeDescuento = sOCIO.subtotal * 0.15m;
+                        sOCIO.total -= sOCIO.porcentajeDescuento;
+                    }
+                    else
+                    {
+                        sOCIO.porcentajeDescuento = 0;
+                    }
+                }
             }
-
-            sOCIO.total -= sOCIO.porcentajeDescuento;
             #endregion
 
-            #region Modificador por forma de pago
+            #region forma de pago y recargos
             if (rbtEfectivo.Checked)
             {
                 sOCIO.porcentajeAjuste = -(sOCIO.total * 0.10m);
+                sOCIO.total += sOCIO.porcentajeAjuste;
             }
             else if (rbtTarjeta.Checked && cboxCuotas.SelectedIndex != -1)
             {
-                string cuotas = cboxCuotas.Text;
-                if (cuotas == "3") sOCIO.porcentajeAjuste = sOCIO.total * 0.10m;
-                else if (cuotas == "6") sOCIO.porcentajeAjuste = sOCIO.total * 0.20m;
+                if (cboxCuotas.Text == "3") sOCIO.porcentajeAjuste = sOCIO.total * 0.10m;
+                else if (cboxCuotas.Text == "6") sOCIO.porcentajeAjuste = sOCIO.total * 0.20m;
                 else sOCIO.porcentajeAjuste = 0;
-            }
 
-            sOCIO.total += sOCIO.porcentajeAjuste;
+                sOCIO.total += sOCIO.porcentajeAjuste;
 
-            if (rbtTarjeta.Checked && cboxCuotas.SelectedIndex != -1)
-            {
-                int cantCuotas = int.Parse(cboxCuotas.Text);
-                sOCIO.valorCuota = sOCIO.total / cantCuotas;
+                int cuotas = int.Parse(cboxCuotas.Text);
+                sOCIO.valorCuota = sOCIO.total / cuotas;
             }
             #endregion
 
             MessageBox.Show($"Resumen de inscripcion\n" +
                     $"Cliente: {sOCIO.nombre}\n" +
+                    $"Edad: {sOCIO.edad}\n" +
                     $"Meses: {sOCIO.meses}\n" +
-                    $"Subtotal: ${sOCIO.subtotal:N2}\n" +
-                    $"Total a pagar: ${sOCIO.total:N2}",
+                    $"Subtotal: ${sOCIO.subtotal:0}\n" +
+                    $"Descuento aplicado: ${sOCIO.porcentajeDescuento:0}\n" +
+                    $"Total a pagar: ${sOCIO.total:0}",
                     "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // guardar en el array
+            // guardar en el array manteniendo el límite de 3
             if (indiceClientes < 3)
             {
                 arrayClientes[indiceClientes] = sOCIO;
@@ -196,7 +228,7 @@ namespace pryLencinaGimnasio
             }
             else
             {
-                MessageBox.Show("Se ha alcanzado el límite máximo de 3 clientes.", "Límite", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Se ha alcanzado el límite de 3 clientes.");
             }
 
             EstadoInicial();
@@ -212,7 +244,6 @@ namespace pryLencinaGimnasio
                 return;
             }
 
-            // Recorre hasta un máximo de 3 clientes 
             for (int i = 0; i < indiceClientes; i++)
             {
                 SOCIO socioActual = arrayClientes[i];
@@ -224,7 +255,6 @@ namespace pryLencinaGimnasio
             }
         }
 
-
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void lblEstudiante_Click(object sender, EventArgs e) { }
         private void groupBox1_Enter_1(object sender, EventArgs e) { }
@@ -232,18 +262,5 @@ namespace pryLencinaGimnasio
         private void lblTurno_Click(object sender, EventArgs e) { }
         private void checkBox2_CheckedChanged(object sender, EventArgs e) { }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) { }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            cboxCuotas.Enabled = rbtTarjeta.Checked;
-            if (rbtTarjeta.Checked && cboxCuotas.Items.Count > 0)
-            {
-                cboxCuotas.SelectedIndex = 0;
-            }
-            else
-            {
-                cboxCuotas.SelectedIndex = -1;
-            }
-        }
     }
 }
